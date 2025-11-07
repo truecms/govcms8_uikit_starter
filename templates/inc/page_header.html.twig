@@ -2,13 +2,11 @@
 {% set header_attributes = create_attribute() %}
 
 {# Add header classes. #}
-{%
-  set header_classes = [
+{% set header_classes = [
   'au-header',
   'au-body',
   header_style ? header_style,
-]
-%}
+] %}
 
 <div>
   <header {{ header_attributes.addClass(header_classes) }}>

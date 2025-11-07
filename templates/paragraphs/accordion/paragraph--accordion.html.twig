@@ -38,7 +38,7 @@
 #}
 {% extends '@govcms8_uikit_starter/paragraphs/paragraph.html.twig' %}
 
-{# Prepare variable for paragrpah id.  #}
+{# Prepare variable for paragrpah id. #}
 {% set accordion_item_id = paragraph.id() %}
 
 {# Check what orientation value is used. #}
@@ -56,14 +56,12 @@
   {{ attach_library('govcms8_uikit_starter/uikit-animate') }}
   {{ attach_library('govcms8_uikit_starter/uikit-accordion') }}
 
-{%
-  include '@govcms8_uikit/accordion/accordion.twig' with {
+{% include '@govcms8_uikit/accordion/accordion.twig' with {
   id: accordion_item_id,
   title: content.field_heading.0,
   body: content.field_accordion_body.0,
   orientation: orientation,
   speed: speed
-} only
-%}
+} only %}
 
 {% endblock %}

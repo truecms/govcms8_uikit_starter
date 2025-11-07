@@ -13,15 +13,13 @@
  * @see template_preprocess_textarea()
  */
 #}
-{%
-  set classes = [
+{% set classes = [
   'au-text-input',
   'au-text-input--block',
   'form-textarea',
   resizable ? 'resize-' ~ resizable,
   required ? 'required',
-]
-%}
+] %}
 
 {% extends '@govcms8_uikit/text-inputs/textarea.twig' %}
 

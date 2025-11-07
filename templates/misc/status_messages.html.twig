@@ -32,6 +32,5 @@
     heading: status_headings[type],
     modifier_class: attributes.addClass('au-page-alerts--' ~ type).class|safe_join(' '),
     attributes: attributes.setAttribute('aria-label', status_headings[type])
-  } only
-  %}
+  } only %}
 {% endfor %}

@@ -1,8 +1,6 @@
-{%
-  set classes = [
+{% set classes = [
   'au-header-heading',
-]
-%}
+] %}
 {{ title_prefix }}
 {% if title %}
   <h1{{ title_attributes.addClass(classes) }}>{{ title }}</h1>

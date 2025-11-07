@@ -40,7 +40,7 @@
 #}
 
 {% for item in items %}
-  {%  if item.content['#markup'] %}
+  {% if item.content['#markup'] %}
 
     {% set accordion_group_id = '.accordion-group-' ~ element['#object'].id() %}
     <button class="au-btn au-btn--secondary accordion-group__control" onclick="return AU.accordion.Close( document.querySelectorAll('{{ accordion_group_id }} .au-accordion__title') )">{{ item.content }}</button>

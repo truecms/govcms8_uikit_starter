@@ -7,10 +7,9 @@
  * - content: [string] Text on the button.
  */
 #}
-{% set classes=[
+{% set classes = [
   'au-btn',
-]
-%}
+] %}
 {% block button %}
-  <button class="{{classes}}">{{ content }}</button>
+  <button class="{{ classes }}">{{ content }}</button>
 {% endblock %}

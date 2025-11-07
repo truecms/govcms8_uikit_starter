@@ -35,14 +35,12 @@
       <ul class="au-link-list menu menu-level-{{ menu_level }}">
     {% endif %}
     {% for item in items %}
-      {%
-        set classes = [
+      {% set classes = [
           'menu-item',
           item.is_expanded ? 'menu-item--expanded',
           item.is_collapsed ? 'menu-item--collapsed',
           item.in_active_trail ? 'menu-item--active-trail',
-        ]
-      %}
+        ] %}
       <li{{ item.attributes.addClass(classes) }}>
         {{ link(item.title, item.url) }}
         {% if item.below %}

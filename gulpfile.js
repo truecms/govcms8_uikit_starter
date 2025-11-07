@@ -5,16 +5,16 @@ const gulp = require('gulp');
 const config = require('./config.json');
 
 // Include plugins.
-const sass = require('gulp-sass');
+const sassCompiler = require('sass');
+const sass = require('gulp-sass')(sassCompiler);
 const imagemin = require('gulp-imagemin');
 const plumber = require('gulp-plumber');
 const glob = require('gulp-sass-glob');
-const uglify = require('gulp-uglify');
+const terser = require('gulp-terser');
 const concat = require('gulp-concat');
 const notify = require('gulp-notify');
 const rename = require('gulp-rename');
 const sourcemaps = require('gulp-sourcemaps');
-const jshint = require('gulp-jshint');
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const del = require('del');
@@ -115,7 +115,7 @@ gulp.task('scripts', function() {
       .pipe(concat('./index.js'))
       .pipe(gulp.dest('./assets/scripts/'))
       .pipe(rename(config.js.file))
-      .pipe(uglify())
+      .pipe(terser())
       .pipe(gulp.dest(config.js.dest));
 });
 
@@ -174,12 +174,7 @@ gulp.task('watch', function() {
   gulp.watch(config.js.src, { usePolling: true }, gulp.series('scripts_dev', 'removeTemporaryStorage'));
 });
 
-// JS Linting.
-gulp.task('js-lint', function() {
-  return gulp.src(config.js.src)
-      .pipe(jshint())
-      .pipe(jshint.reporter('default'));
-});
+// JS Linting removed (use separate tooling if needed).
 
 // BrowserSync settings.
 gulp.task('browserSync', function() {

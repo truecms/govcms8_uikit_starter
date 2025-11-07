@@ -1,0 +1,75 @@
+name: Theme Lint
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  php_lint:
+    name: PHP Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHPCS
+        run: vendor/bin/phpcs
+
+      - name: PHPMD
+        run: vendor/bin/phpmd . text phpmd.xml
+
+      - name: Rector (dry run)
+        run: vendor/bin/rector --clear-cache --dry-run
+
+  twig_lint:
+    name: Twig Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP (Twig tools are PHP-based)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: twigcs
+        run: vendor/bin/twigcs --config=.twig_cs.php templates
+
+      - name: twig-cs-fixer (lint)
+        run: vendor/bin/twig-cs-fixer lint templates
+
+  npm_audit:
+    name: NPM Audit (Node 22)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Audit (fail on high/critical)
+        run: npm audit --audit-level=high

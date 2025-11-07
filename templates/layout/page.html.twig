@@ -42,21 +42,19 @@
  * @see html.html.twig
  */
 #}
-{%
-  set classes = [
+{% set classes = [
   'au-body',
   'au-grid',
   'layout-container',
   theme__highlighted_layouts ? theme__highlighted_layouts,
   is_panelized ? 'is-panelized',
-]
-%}
+] %}
 
 {% if theme__highlighted_layouts %}
   {{ attach_library('govcms8_uikit_starter/highlighted-layouts') }}
 {% endif %}
 
-<div{{ attributes.addClass(classes)}}>
+<div{{ attributes.addClass(classes) }}>
   {# Header element #}
   {% include '@govcms8_uikit_starter/inc/page_header.html.twig' %}
 
@@ -123,7 +121,7 @@
   </main>
 
   {# Footer element. #}
-  {%  include '@govcms8_uikit_starter/inc/page_footer.html.twig' %}
+  {% include '@govcms8_uikit_starter/inc/page_footer.html.twig' %}
 
   <a href="#top" title="Back to top" class="back-to-top__link au-direction-link">Back to top<span class="au-direction-link__arrow au-direction-link__arrow--up" aria-hidden="true"></span></a>
 

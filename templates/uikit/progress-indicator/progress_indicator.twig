@@ -14,8 +14,7 @@
   {% for item in items %}
     {% set link_classes = [
       'au-progress-indicator__link--' ~ item.status|lower,
-    ]
-    %}
+    ] %}
     <li>
       <a href="{{ item.url }}" class="au-progress-indicator__link {{ link_classes }}">
         <span class="au-progress-indicator__status">{{ item.status }}</span>

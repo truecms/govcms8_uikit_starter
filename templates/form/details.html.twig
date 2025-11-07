@@ -15,12 +15,10 @@
  */
 #}
 <details{{ attributes.addClass('au-fieldset') }}>
-  {%
-    set summary_classes = [
+  {% set summary_classes = [
       required ? 'js-form-required',
       required ? 'form-required',
-    ]
-  %}
+    ] %}
   {%- if title -%}
     <summary{{ summary_attributes.addClass(summary_classes) }}>{{ title }}</summary>
   {%- endif -%}
