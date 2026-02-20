@@ -63,6 +63,18 @@ GitHub Actions validates:
 - Node 22 build and `npm audit`
 - Drupal compatibility matrix install checks on Drupal 10 and Drupal 11 (PHP 8.4)
 
+## Release Versioning Policy
+
+GitHub tags/releases follow the supported Drupal major version:
+
+- First Drupal 11 line release: `11.0.0`
+- Subsequent updates in the Drupal 11 line: `11.0.1`, `11.0.2`, ...
+- For this line, increment patch only unless a new Drupal major support line is introduced.
+
+When Drupal 12 becomes the supported major line, start a new release line at `12.0.0`.
+
+See `/Users/ivan/websites/sites/govau/govcms8_uikit_starter/docs/PRODUCTION_RELEASES.md` for the full release procedure and template usage.
+
 ## Notes
 
 - Legacy Pancake packages are removed from this theme.
