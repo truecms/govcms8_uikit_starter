@@ -33,5 +33,6 @@
   @extend .au-page-alerts--alt !optional;
 }
 .au-body--dark.au-body--alt .au-page-alerts {
-  @extend .au-page-alerts--dark.au-page-alerts--alt !optional;
+  @extend .au-page-alerts--dark !optional;
+  @extend .au-page-alerts--alt !optional;
 }

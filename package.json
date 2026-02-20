@@ -1,114 +1,52 @@
 {
   "name": "govcms8_uikit_starter",
-  "version": "1.0.0",
-  "description": "Starter theme for GovCMS 8 integrating UI Kit.",
-  "main": "gulpfile.js",
+  "version": "2.0.0",
+  "description": "GovCMS UI-Kit Starter theme for Drupal 10/11 using TrueCMS components.",
+  "main": "vite.config.mjs",
   "author": "morpht.com",
   "scripts": {
-    "setup": "npm ci",
-    "styleguide": "kss --config kss-config.json",
-    "gulp": "gulp",
-    "gulp dev": "gulp dev",
-    "js-lint": "echo 'JS lint disabled; use separate tooling'"
+    "setup": "npm install --ignore-scripts",
+    "build": "vite build && node assets/modern/sync-build.mjs",
+    "build:dev": "vite build --watch --mode development"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.20",
-    "browser-sync": "^2.29.3",
-    "del": "^7.1.0",
-    "gulp": "^4.0.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-imagemin": "^8.0.0",
-    "gulp-notify": "^4.0.0",
-    "gulp-plumber": "^1.2.1",
-    "gulp-postcss": "^10.0.0",
-    "gulp-rename": "^2.0.0",
-    "gulp-sass": "^5.1.0",
-    "gulp-sass-glob": "^1.1.0",
-    "gulp-sourcemaps": "^3.0.0",
-    "gulp-terser": "^2.1.0",
-    "kss": "^3.1.0",
-    "sass": "^1.81.0"
+    "sass": "^1.93.3",
+    "vite": "^7.1.12"
   },
   "browserslist": [
     "last 2 versions",
-    "> 1%",
-    "ie 10"
+    "> 1%"
   ],
   "dependencies": {
-    "@truecms/accordion": "^8.0.0",
-    "@truecms/animate": "^2.0.0",
-    "@truecms/body": "^3.0.0",
-    "@truecms/breadcrumbs": "^4.0.0",
-    "@truecms/buttons": "^4.0.0",
-    "@truecms/callout": "^4.0.0",
-    "@truecms/card": "^1.0.0",
-    "@truecms/control-input": "^4.0.0",
-    "@truecms/core": "^4.0.0",
-    "@truecms/cta-link": "^3.0.0",
-    "@truecms/direction-links": "^4.0.0",
-    "@truecms/footer": "^4.0.0",
-    "@truecms/form": "^1.0.0",
-    "@truecms/grid-12": "^3.0.0",
-    "@truecms/header": "^5.0.0",
-    "@truecms/headings": "^3.0.0",
-    "@truecms/inpage-nav": "^4.0.0",
-    "@truecms/keyword-list": "^4.0.0",
-    "@truecms/link-list": "^4.0.0",
-    "@truecms/main-nav": "^2.0.0",
-    "@truecms/page-alerts": "^3.0.0",
-    "@truecms/pancake": "^2.0.0",
-    "@truecms/pancake-js": "^2.0.0",
-    "@truecms/pancake-json": "^2.0.0",
-    "@truecms/pancake-react": "^2.0.0",
-    "@truecms/pancake-sass": "^3.0.0",
-    "@truecms/progress-indicator": "^4.0.0",
-    "@truecms/responsive-media": "^3.0.0",
-    "@truecms/select": "^3.0.0",
-    "@truecms/side-nav": "^6.0.0",
-    "@truecms/skip-link": "^3.0.0",
-    "@truecms/table": "^1.0.0",
-    "@truecms/tags": "^5.0.0",
-    "@truecms/text-inputs": "^3.0.0"
-  },
-  "pancake": {
-    "auto-save": true,
-    "plugins": true,
-    "ignore": [],
-    "json": {
-      "enable": false,
-      "location": "assets/uikit",
-      "name": "uikit",
-      "content": {
-        "name": true,
-        "version": true,
-        "dependencies": true,
-        "path": true,
-        "settings": true
-      }
-    },
-    "css": {
-      "minified": true,
-      "modules": false,
-      "browsers": [
-        "last 2 versions",
-        "ie 10"
-      ],
-      "location": "assets/uikit/css/",
-      "name": "uikit.min.css"
-    },
-    "sass": {
-      "modules": false,
-      "location": "assets/uikit/sass/",
-      "name": "uikit.scss"
-    },
-    "js": {
-      "minified": true,
-      "modules": true,
-      "location": "assets/uikit/js/",
-      "name": "uikit.min.js"
-    },
-    "react": {
-      "location": "assets/uikit/react/"
-    }
+    "@truecms/accordion": "^9.0.0",
+    "@truecms/animate": "^3.0.0",
+    "@truecms/body": "^4.0.0",
+    "@truecms/breadcrumbs": "^5.0.0",
+    "@truecms/buttons": "^5.0.0",
+    "@truecms/callout": "^5.0.0",
+    "@truecms/card": "^2.0.0",
+    "@truecms/control-input": "^5.0.0",
+    "@truecms/core": "^6.0.0",
+    "@truecms/cta-link": "^4.0.0",
+    "@truecms/direction-links": "^5.0.0",
+    "@truecms/footer": "^5.0.0",
+    "@truecms/form": "^2.0.0",
+    "@truecms/grid-12": "^4.0.0",
+    "@truecms/header": "^6.0.0",
+    "@truecms/headings": "^4.0.0",
+    "@truecms/inpage-nav": "^5.0.0",
+    "@truecms/keyword-list": "^5.0.0",
+    "@truecms/link-list": "^5.0.0",
+    "@truecms/main-nav": "^3.0.0",
+    "@truecms/page-alerts": "^4.0.0",
+    "@truecms/progress-indicator": "^5.0.0",
+    "@truecms/responsive-media": "^4.0.0",
+    "@truecms/searchbox": "^2.0.0",
+    "@truecms/select": "^4.0.0",
+    "@truecms/side-nav": "^7.0.0",
+    "@truecms/skip-link": "^4.0.0",
+    "@truecms/table": "^2.0.0",
+    "@truecms/tags": "^6.0.0",
+    "@truecms/text-inputs": "^4.0.0"
   }
 }

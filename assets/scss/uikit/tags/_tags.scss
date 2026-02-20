@@ -9,7 +9,8 @@
 //
 
 .au-body--dark .au-tag {
-  @extend .au-tag.au-tag--dark !optional;
+  @extend .au-tag !optional;
+  @extend .au-tag--dark !optional;
 }
 
 .au-tags {

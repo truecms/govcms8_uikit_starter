@@ -71,5 +71,8 @@ jobs:
       - name: Install
         run: npm ci --ignore-scripts
 
+      - name: Build assets
+        run: npm run build
+
       - name: Audit (fail on high/critical)
         run: npm audit --audit-level=high

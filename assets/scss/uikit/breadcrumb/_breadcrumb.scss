@@ -8,5 +8,6 @@
 //
 
 .au-body--dark .au-breadcrumbs {
-  @extend .au-breadcrumbs.au-breadcrumbs--dark !optional;
+  @extend .au-breadcrumbs !optional;
+  @extend .au-breadcrumbs--dark !optional;
 }

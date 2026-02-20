@@ -1,5 +1,5 @@
-assets/uikit
 node_modules
 vendor
 composer.lock
 .twig-cs-fixer.cache
+build

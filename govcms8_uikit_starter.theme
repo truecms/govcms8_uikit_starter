@@ -151,7 +151,7 @@ function govcms8_uikit_starter_form_alter(array &$form, FormStateInterface $form
 /**
  * Implements hook_preprocess_HOOK().
  */
-function govcms8_uikit_starter_preprocess_menu(&$variables): void {
+function govcms8_uikit_starter_preprocess_menu(array &$variables): void {
   $theme_settings_mappings = [
     'side_nav_style' => [
       'theme__side_nav--dark' => 'au-body--dark au-side-nav--dark',
@@ -162,7 +162,8 @@ function govcms8_uikit_starter_preprocess_menu(&$variables): void {
 
   if (!empty($variables['items'])) {
     // Find the active link and apply a flag.
-    $current_path = \Drupal::request()->getRequestUri();
+    // \Drupal::request() is deprecated; use the request stack in D10/11.
+    $current_path = \Drupal::requestStack()->getCurrentRequest()->getRequestUri();
     govcms8_uikit_starter_theme_find_active_link($variables['items'], $current_path);
 
     // Find the parent link (for menus starting at > depth 2).
@@ -188,7 +189,7 @@ function govcms8_uikit_starter_preprocess_menu(&$variables): void {
 /**
  * Implements hook_preprocess_main__menu().
  */
-function govcms8_uikit_starter_preprocess_menu__main(&$variables): void {
+function govcms8_uikit_starter_preprocess_menu__main(array &$variables): void {
   $theme_settings_mappings = [
     'main_nav_style' => [
       'theme__main_nav--dark' => 'au-body--dark au-main-nav--dark',
@@ -273,7 +274,7 @@ function govcms8_uikit_starter_theme_settings_mappings(array &$variables, array 
  * @param string $path
  *   Path to check.
  */
-function govcms8_uikit_starter_theme_find_active_link(array &$links, $path): void {
+function govcms8_uikit_starter_theme_find_active_link(array &$links, string $path): void {
   foreach ($links as &$item) {
     if ($item['url']->toString() === $path) {
       $item['is_active'] = TRUE;
