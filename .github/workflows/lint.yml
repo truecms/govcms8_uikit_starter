@@ -76,3 +76,33 @@ jobs:
 
       - name: Audit (fail on high/critical)
         run: npm audit --audit-level=high
+
+  drupal_compatibility:
+    name: Drupal ${{ matrix.drupal_major }} compatibility (PHP 8.4)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        drupal_major: ['10', '11']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate theme install in clean Drupal project
+        run: |
+          set -euxo pipefail
+          PROJECT_DIR="$(mktemp -d)/drupal"
+          composer create-project "drupal/recommended-project:^${{ matrix.drupal_major }}" "$PROJECT_DIR" --no-interaction --no-progress
+          cd "$PROJECT_DIR"
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer config repositories.govcms_uikit path "$GITHUB_WORKSPACE"
+          composer require govcms/govcms8_uikit_starter:@dev --no-interaction --no-progress
+          test -f web/themes/contrib/govcms8_uikit_starter/govcms8_uikit_starter.info.yml

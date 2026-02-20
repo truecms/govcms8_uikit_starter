@@ -8,6 +8,14 @@ Drupal theme starter aligned to the TrueCMS design-system packages and compatibl
 - npm 10+
 - PHP 8.2+
 
+## Canonical Migration Instructions
+
+For AI-assisted upgrades, use the upstream installation entrypoint:
+
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/truecms/design-system-components/refs/heads/2.x/docs/installation/INSTRUCTIONS.md
+```
+
 ## Frontend workflow
 
 Install dependencies:
@@ -45,6 +53,15 @@ Auto-fix where possible:
 ```bash
 ahoy lint-fix
 ```
+
+## CI Coverage
+
+GitHub Actions validates:
+
+- PHP linters (PHPCS, PHPMD, Rector dry-run)
+- Twig linters (`twigcs`, `twig-cs-fixer`)
+- Node 22 build and `npm audit`
+- Drupal compatibility matrix install checks on Drupal 10 and Drupal 11 (PHP 8.4)
 
 ## Notes
 
