@@ -22,35 +22,6 @@
     "> 1%"
   ],
   "dependencies": {
-    "@truecms/accordion": "^9.0.0",
-    "@truecms/animate": "^3.0.0",
-    "@truecms/body": "^4.0.0",
-    "@truecms/breadcrumbs": "^5.0.0",
-    "@truecms/buttons": "^5.0.0",
-    "@truecms/callout": "^5.0.0",
-    "@truecms/card": "^2.0.0",
-    "@truecms/control-input": "^5.0.0",
-    "@truecms/core": "^6.0.0",
-    "@truecms/cta-link": "^4.0.0",
-    "@truecms/direction-links": "^5.0.0",
-    "@truecms/footer": "^5.0.0",
-    "@truecms/form": "^2.0.0",
-    "@truecms/grid-12": "^4.0.0",
-    "@truecms/header": "^6.0.0",
-    "@truecms/headings": "^4.0.0",
-    "@truecms/inpage-nav": "^5.0.0",
-    "@truecms/keyword-list": "^5.0.0",
-    "@truecms/link-list": "^5.0.0",
-    "@truecms/main-nav": "^3.0.0",
-    "@truecms/page-alerts": "^4.0.0",
-    "@truecms/progress-indicator": "^5.0.0",
-    "@truecms/responsive-media": "^4.0.0",
-    "@truecms/searchbox": "^2.0.0",
-    "@truecms/select": "^4.0.0",
-    "@truecms/side-nav": "^7.0.0",
-    "@truecms/skip-link": "^4.0.0",
-    "@truecms/table": "^2.0.0",
-    "@truecms/tags": "^6.0.0",
-    "@truecms/text-inputs": "^4.0.0"
+    "@truecms/design-system": "beta"
   }
 }
