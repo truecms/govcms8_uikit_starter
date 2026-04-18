@@ -37,6 +37,8 @@ High priority after `design-system-components` release readiness.
 - Local validation completed: `npm ci --ignore-scripts`, `npm run build`, `npm audit --audit-level=high`, `ahoy lint`.
 - Drupal compatibility validation completed on `2026-02-20` by installing this theme into clean `drupal/recommended-project` codebases for both `^11` and `^10`.
 - CI now includes a Drupal compatibility matrix job (`10` and `11`) on PHP 8.4 to continuously validate composer-level installation compatibility.
+- Follow-up stacked PR #2 (`feature/drupal-smoke-build-ci`) adds Node 22 setup plus frontend `npm ci` / `npm run build` smoke verification inside the clean Drupal install job, asserting the built CSS and JS artefacts exist after installation.
+- Upstream producer progress for unified single-install adoption is tracked in `../design-system-components/TRUECMS_ROADMAP.md` (PR #21), but the actual GovCMS unified-package pilot remains blocked until an updated `@truecms/design-system` prerelease is published.
 - Remaining unchecked items are release/pilot/governance tasks and runtime UX checks (for example interaction browser testing and full smoke scenarios).
 
 ## Notes
