@@ -114,6 +114,11 @@ jobs:
           coverage: none
           tools: composer:v2
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Validate theme install in clean Drupal project
         run: |
           set -euxo pipefail
@@ -124,4 +129,15 @@ jobs:
           composer config prefer-stable true
           composer config repositories.govcms_uikit path "$GITHUB_WORKSPACE"
           composer require govcms/govcms8_uikit_starter:@dev --no-interaction --no-progress
-          test -f web/themes/contrib/govcms8_uikit_starter/govcms8_uikit_starter.info.yml
+          THEME_DIR="$PROJECT_DIR/web/themes/contrib/govcms8_uikit_starter"
+          test -f "$THEME_DIR/govcms8_uikit_starter.info.yml"
+          cd "$THEME_DIR"
+          npm ci --ignore-scripts
+          npm run build
+          test -f css/style.css
+          test -f css/highlighted_layouts.css
+          test -f js/govcms8_uikit_starter.js
+          test -f js/accordion.js
+          test -f js/animate.js
+          test -f js/main-nav.js
+          test -f js/side-nav.js
