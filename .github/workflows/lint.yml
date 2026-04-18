@@ -56,6 +56,28 @@ jobs:
       - name: twig-cs-fixer (lint)
         run: vendor/bin/twig-cs-fixer lint templates
 
+  node_build:
+    name: Node ${{ matrix.node-version }} build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Build assets
+        run: npm run build
+
   npm_audit:
     name: NPM Audit (Node 22)
     runs-on: ubuntu-latest
@@ -70,9 +92,6 @@ jobs:
 
       - name: Install
         run: npm ci --ignore-scripts
-
-      - name: Build assets
-        run: npm run build
 
       - name: Audit (fail on high/critical)
         run: npm audit --audit-level=high
