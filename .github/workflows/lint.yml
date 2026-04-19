@@ -1,0 +1,143 @@
+name: Theme Lint
+
+on:
+  push:
+    branches: ["2.x"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  php_lint:
+    name: PHP Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: PHPCS
+        run: vendor/bin/phpcs
+
+      - name: PHPMD
+        run: vendor/bin/phpmd . text phpmd.xml
+
+      - name: Rector (dry run)
+        run: vendor/bin/rector --clear-cache --dry-run
+
+  twig_lint:
+    name: Twig Linters
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP (Twig tools are PHP-based)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: twigcs
+        run: vendor/bin/twigcs --config=.twig_cs.php templates
+
+      - name: twig-cs-fixer (lint)
+        run: vendor/bin/twig-cs-fixer lint templates
+
+  node_build:
+    name: Node ${{ matrix.node-version }} build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [22, 24]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Build assets
+        run: npm run build
+
+  npm_audit:
+    name: NPM Audit (Node 22)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install
+        run: npm ci --ignore-scripts
+
+      - name: Audit (fail on high/critical)
+        run: npm audit --audit-level=high
+
+  drupal_compatibility:
+    name: Drupal ${{ matrix.drupal_major }} compatibility (PHP 8.4)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        drupal_major: ['10', '11']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate theme install in clean Drupal project
+        run: |
+          set -euxo pipefail
+          PROJECT_DIR="$(mktemp -d)/drupal"
+          composer create-project "drupal/recommended-project:^${{ matrix.drupal_major }}" "$PROJECT_DIR" --no-interaction --no-progress
+          cd "$PROJECT_DIR"
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer config repositories.govcms_uikit path "$GITHUB_WORKSPACE"
+          composer require govcms/govcms8_uikit_starter:@dev --no-interaction --no-progress
+          THEME_DIR="$PROJECT_DIR/web/themes/contrib/govcms8_uikit_starter"
+          test -f "$THEME_DIR/govcms8_uikit_starter.info.yml"
+          cd "$THEME_DIR"
+          npm ci --ignore-scripts
+          npm run build
+          test -f css/style.css
+          test -f css/highlighted_layouts.css
+          test -f js/govcms8_uikit_starter.js
+          test -f js/accordion.js
+          test -f js/animate.js
+          test -f js/main-nav.js
+          test -f js/side-nav.js

@@ -27,12 +27,10 @@
 {% set main_nav_attributes = create_attribute() %}
 
 {# Add main nav classes. #}
-{%
-  set main_nav_classes = [
+{% set main_nav_classes = [
   'au-main-nav',
   main_nav_style ? main_nav_style,
-]
-%}
+] %}
 
 <nav{{ main_nav_attributes.addClass(main_nav_classes) }} aria-label="main navigation">
   <div class="container">
@@ -56,12 +54,10 @@
               </button>
               <ul class="au-link-list">
                 {% for item in items %}
-                  {%
-                    set classes = [
+                  {% set classes = [
                     item.in_active_trail ? 'active',
-                  ]
-                  %}
-                  {% set link_attributes = item.in_active_trail ? { 'aria-current': 'page' } %}
+                  ] %}
+                  {% set link_attributes = item.in_active_trail ? {'aria-current': 'page'} %}
                   <li{{ item.attributes.addClass(classes) }}>
                     {% if link_attributes %}
                       {{ link(item.title, item.url, link_attributes) }}

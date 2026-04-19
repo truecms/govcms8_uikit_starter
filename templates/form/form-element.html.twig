@@ -44,8 +44,7 @@
  * @see template_preprocess_form_element()
  */
 #}
-{%
-  set classes = [
+{% set classes = [
   'js-form-item',
   'form-item',
   'js-form-type-' ~ type|clean_class,
@@ -57,15 +56,12 @@
   errors ? 'form-item--error',
   'au-form-group',
   errors ? 'au-form-group--invalid',
-]
-%}
-{%
-  set description_classes = [
+] %}
+{% set description_classes = [
   'description',
   description_display == 'invisible' ? 'visually-hidden',
   'au-hint-text',
-]
-%}
+] %}
 <div{{ attributes.addClass(classes) }}>
   {% if type == 'checkbox' or type == 'radio' %}
     <label class="au-control-input">

@@ -1,0 +1,28 @@
+# Simple Ahoy commands for local linting without containers.
+---
+ahoyapi: v2
+
+commands:
+  lint:
+    usage: Run all linters for the theme.
+    cmd: |
+      ahoy lint-be && ahoy lint-fe
+
+  lint-be:
+    usage: Run PHP linters (phpcs, phpmd, rector dry-run).
+    cmd: |
+      vendor/bin/phpcs
+      vendor/bin/phpmd . text phpmd.xml
+      vendor/bin/rector --clear-cache --dry-run
+
+  lint-fe:
+    usage: Run Twig linters.
+    cmd: |
+      vendor/bin/twigcs --config=.twig_cs.php templates
+      vendor/bin/twig-cs-fixer lint templates
+
+  lint-fix:
+    usage: Auto-fix what can be fixed (PHP CS fixer not used; run Rector write + Twig fixer).
+    cmd: |
+      vendor/bin/rector --clear-cache
+      vendor/bin/twig-cs-fixer lint --fix

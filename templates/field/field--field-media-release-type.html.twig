@@ -4,21 +4,17 @@
 */
 #}
 {% extends '@govcms8_uikit/tags/tags.twig' %}
-{%
-  set classes = [
+{% set classes = [
   'field',
   'field--name-' ~ field_name|clean_class,
   'field--type-' ~ field_type|clean_class,
   'field--label-' ~ label_display,
-]
-%}
-{%
-  set title_classes = [
+] %}
+{% set title_classes = [
   label_display == 'visually_hidden' ? 'sr-only',
   label_display == 'above' ? 'position-above',
   label_display == 'inline' ? 'position-inline',
-]
-%}
+] %}
 
 {% block tags %}
   <div{{ attributes.addClass(classes) }}>

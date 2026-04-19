@@ -5,6 +5,10 @@ global-styling:
       css/style.css: {}
   js:
     js/govcms8_uikit_starter.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/jquery
 
 highlighted-layouts:
   css:

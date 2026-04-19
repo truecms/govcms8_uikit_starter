@@ -29,13 +29,11 @@
 {% set side_nav_attributes = create_attribute() %}
 
 {# Add side nav classes. #}
-{%
-  set side_nav_classes = [
+{% set side_nav_classes = [
   'au-side-nav',
   'au-accordion',
   side_nav_style ? side_nav_style,
-]
-%}
+] %}
 
 <aside {{ side_nav_attributes.addClass(side_nav_classes) }} aria-label="side navigation">
   <button
@@ -61,11 +59,9 @@
   {% if items %}
     <ul class="au-link-list">
       {% for item in items %}
-        {%
-          set classes = [
+        {% set classes = [
           item.in_active_trail ? 'active',
-        ]
-        %}
+        ] %}
         <li{{ item.attributes.addClass(classes) }}>
           {% if item.is_active %}
             <span>{{ item.title }}</span>

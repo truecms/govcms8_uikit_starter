@@ -1,1 +1,344 @@
-var AU=AU||{};!function(f){var e={};function u(e,t,n){if(e===t)return{stepSize:0,steps:0,intervalTime:0};var o=t-e,i=n/o,a=o<0?-1:1,r=Math.abs(o/a);return i=n/r,Math.abs(i)<1e3/60&&(i=1e3/60,a=o/(r=Math.ceil(Math.abs(n/i)))),{stepSize:a,steps:r-1,intervalTime:i}}"undefined"!=typeof module&&(e.CalculateAnimationSpecs=u),e.GetCSSPropertyBecauseIE=function(e,t){if("undefined"!=typeof getComputedStyle)return window.getComputedStyle(e)[t];var n=e.currentStyle[t];return"auto"===n&&(n=f.animate.CalculateAuto(e,t)),n},e.CalculateAuto=function(e,t){var n,o;return e.style[t]=(o="height"===t?(n=e.clientHeight,e.style[t]="auto",e.clientHeight):(n=e.clientWidth,e.style[t]="auto",e.clientWidth),n+"px"),parseInt(o)},e.Stop=function(e){clearInterval(e.AUanimation)},e.Run=function(a){var r=a.element,e=a.speed||250;void 0===r.length&&(r=[r]),"function"!=typeof a.callback&&(a.callback=function(){}),r[0].AUinteration=0,r[0].AUinterations=r.length;for(var t=0;t<r.length;t++){var n=r[t];f.animate.Stop(n);var o=parseInt(f.animate.GetCSSPropertyBecauseIE(n,a.property)),i=a.endSize;"auto"===a.endSize&&(i=f.animate.CalculateAuto(n,a.property));var l=u(o,i,e),p=o;l.stepSize<0?n.AUtoggleState="closing":0<l.stepSize&&(n.AUtoggleState="opening"),function(e,t,n,o,i){e.AUanimation=setInterval(function(){if(t===i||0===o.steps){if(f.animate.Stop(e),e.style[a.property]=i+"px",e.AUtoggleState="",r[0].AUinteration++,"auto"===a.endSize&&(e.style[a.property]=""),r[0].AUinteration>=r[0].AUinterations)return a.callback()}else n+=o.stepSize,e.style[a.property]=n+"px",o.steps--},Math.abs(o.intervalTime))}(n,o,p,l,i)}},e.Toggle=function(t){var n=t.element,e=t.property||"height",o=t.speed||250,i=void 0===t.closeSize?0:t.closeSize,a=void 0===t.openSize?"auto":t.openSize;void 0===n.length&&(n=[n]),"function"!=typeof t.prefunction&&(t.prefunction=function(){}),"function"!=typeof t.postfunction&&(t.postfunction=function(){}),"function"!=typeof t.callback&&(t.callback=function(){}),n[0].AUtoggleInteration=0,n[0].AUtoggleInterations=n.length;for(var r=0;r<n.length;r++){var l,p=n[r];f.animate.Stop(p);var u="",c="",s=parseInt(f.animate.GetCSSPropertyBecauseIE(p,t.property));if(s===i||"closing"===p.AUtoggleState)l=a,u="opening",c="open";else{if(s===i&&"opening"!==p.AUtoggleState)throw new Error("AU.animate.Toggle cannot determine state of element");l=i,u="closing",c="closed"}t.prefunction(p,u),f.animate.Run({element:p,endSize:l,property:e,speed:o,callback:function(){if(n[0].AUtoggleInteration++,n[0].AUtoggleInteration===n[0].AUinterations){var e=t.callback(p,c);return t.postfunction(p,c),e}t.postfunction(p,c)}})}},f.animate=e}(AU),"undefined"!=typeof module&&(module.exports=AU),"undefined"!=typeof exports&&(Object.defineProperty(exports,"__esModule",{value:!0}),eval("exports.default = AU"));
+/*! @truecms/animate v3.0.0 */
+/***************************************************************************************************************************************************************
+ *
+ * Animate function
+ *
+ * A function to open, close and toggle the display of page elements.
+ *
+ **************************************************************************************************************************************************************/
+
+var AU = AU || {};
+
+( function( AU ) {
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// NAMESPACE MODULE
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+	var animate = {}
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// PRIVATE FUNCTIONS
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * PRIVATE
+	 * Calculate the requirements for the desired animation
+	 *
+	 * @param  {integer} initialSize - The initial size of the element to animate
+	 * @param  {integer} endSize     - The size the element after the animation completes
+	 * @param  {string}  speed       - The speed of the animation in ms
+	 *
+	 * @return {object}              - Required steps, stepSize and intervalTime for the animation
+	 */
+	function CalculateAnimationSpecs( initialSize, endSize, speed ) {
+
+		if( initialSize === endSize ) {
+			return {
+				stepSize: 0,
+				steps: 0,
+				intervalTime: 0,
+			};
+		}
+
+		var distance = endSize - initialSize;        // the overall distance the animation needs to travel
+		var intervalTime = ( speed / distance );     // the time each setInterval iteration will take
+		var stepSize = distance < 0 ? -1 : 1;        // if distance is negative then we set stepSize to -1
+		var steps = Math.abs( distance / stepSize ); // the amount of steps required to get to endSize
+		intervalTime = speed / steps;
+
+		// we need to adjust our animation specs if interval time exceeds 60FPS eg intervalTime < 16.67ms
+		if( Math.abs( intervalTime ) < ( 1000 / 60 ) ) {
+			intervalTime = ( 1000 / 60 );                          // let’s not get lower that 60FPS
+			steps = Math.ceil( Math.abs( speed / intervalTime ) ); // we now need the steps and make sure we ceil them so -1 won't make them negative
+			stepSize = distance / steps;                           // last thing is step sizes which are derived from all of the above
+		}
+
+		return {
+			stepSize: stepSize,
+			steps: ( steps - 1 ),
+			intervalTime: intervalTime,
+		};
+	}
+
+	// export for node and babel environments
+	if( typeof module !== 'undefined' ) {
+		animate.CalculateAnimationSpecs = CalculateAnimationSpecs;
+	}
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// PUBLIC FUNCTIONS
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Getting computed CSS styles from normal browsers and IE
+	 *
+	 * @param {object} element  - The DOM element we want to get the computed style from
+	 * @param {string} property - The CSS property
+	 *
+	 * @return {string|integer} - The CSS value for the property
+	 */
+	animate.GetCSSPropertyBecauseIE = function( element, property ) {
+		if( typeof getComputedStyle !== 'undefined' ) {
+			return window.getComputedStyle( element )[ property ];
+		}
+		else {
+			var space = element.currentStyle[ property ];
+
+			if( space === 'auto' ) {
+				space = AU.animate.CalculateAuto( element, property );
+			}
+
+			return space;
+		}
+	};
+
+
+	/**
+	 * Calculate the size of the element when it’s dimension(height or width) is set to auto
+	 *
+	 * @param  {object} element   - The element to read auto height from
+	 * @param  {string} dimension - The dimension to measure
+	 *
+	 * @return {integer}          - The size of the element when at dimension(height or width) is set to 'auto'
+	 */
+	animate.CalculateAuto = function( element, dimension ) {
+		var initialSize;
+		var endSize;
+
+		if( dimension === 'height' ) {
+			initialSize = element.clientHeight;              // get current height
+			element.style[ dimension ] = 'auto';             // set height to auto
+			endSize = element.clientHeight;                  // get height again
+			element.style[ dimension ] = initialSize + 'px'; // set back to initial height
+		}
+		else {
+			initialSize = element.clientWidth;
+			element.style[ dimension ] = 'auto';
+			endSize = element.clientWidth;
+			element.style[ dimension ] = initialSize + 'px';
+		}
+
+		return parseInt( endSize );
+	};
+
+
+	/**
+	 * Stop any au animation on a DOM element
+	 *
+	 * @param  {object} element - The element to stop animating
+	 */
+	animate.Stop = function ( element ) {
+		clearInterval( element.AUanimation );
+	};
+
+
+	/**
+	 * The magical animation function
+	 *
+	 * @param  {object}         options          - The options for the animation
+	 * @param  {object}         options.element  - Element/s we are animating (DOM nodes)
+	 * @param  {string}         options.property - The CSS property to animate
+	 * @param  {integer|string} options.endSize  - The size the element should animate to. Can be 'auto' or pixel value
+	 * @param  {integer}        options.speed    - The speed of the animation in milliseconds [optional] [default: 250]
+	 * @param  {function}       options.callback - A function to be executed after the animation ends [optional]
+	 *
+	 * @return {unknown}                         - The return value passed on from our options.callback function [optional]
+	 */
+	animate.Run = function( options ) {
+		// defaults
+		var elements = options.element;
+		var speed = options.speed || 250;
+
+		// making a single DOM element iteratable
+		if( elements.length === undefined ) {
+			elements = [ elements ];
+		}
+
+		// making a callback if none was provided
+		if( typeof options.callback !== 'function' ) {
+			options.callback = function() {};
+		}
+
+		// adding iteration counts
+		elements[ 0 ].AUinteration = 0;
+		elements[ 0 ].AUinterations = elements.length;
+
+		// iterate over all DOM nodes
+		for( var i = 0; i < elements.length; i++ ) {
+			var element = elements[ i ];                                                                   // this element
+			AU.animate.Stop( element );                                                                    // stop any previous animations
+			var initialSize = parseInt( AU.animate.GetCSSPropertyBecauseIE( element, options.property ) ); // the elements current size
+			var endSize = options.endSize;                                                                 // the element end size
+
+			if( options.endSize === 'auto' ) {                                                             // calculate what 'auto' means in pixel
+				endSize = AU.animate.CalculateAuto( element, options.property );
+			}
+
+			// calculate our animation specs
+			var animationSpecs = CalculateAnimationSpecs( initialSize, endSize, speed );
+			var iterateCounter = initialSize;
+
+			// set state
+			if( animationSpecs.stepSize < 0 ) {
+				element.AUtoggleState = 'closing';
+			}
+			else if( animationSpecs.stepSize > 0 ) {
+				element.AUtoggleState = 'opening';
+			}
+
+			// scoping variable
+			(function( element, initialSize, iterateCounter, animationSpecs, endSize ) {
+				// keep track of animation by adding it to the DOM element
+				element.AUanimation = setInterval( function() {
+
+					// when we are at the end
+					if( initialSize === endSize || animationSpecs.steps === 0 ) {
+						AU.animate.Stop( element );
+
+						element.style[ options.property ] = endSize + 'px'; // set to endSize
+						element.AUtoggleState = '';
+
+						elements[ 0 ].AUinteration ++;
+
+						// removing auto so CSS can take over
+						if( options.endSize === 'auto' ) {
+							element.style[ options.property ] = '';
+						}
+
+						// when all iterations have finished, run the callback
+						if( elements[ 0 ].AUinteration >= elements[ 0 ].AUinterations ) {
+							return options.callback();
+						}
+					}
+
+					// if we are still animating
+					else {
+						iterateCounter += animationSpecs.stepSize;
+						element.style[ options.property ] = iterateCounter + 'px';
+
+						animationSpecs.steps --;
+					}
+
+				}, Math.abs( animationSpecs.intervalTime ) );
+			})( element, initialSize, iterateCounter, animationSpecs, endSize );
+		}
+	};
+
+
+	/**
+	 * Toggle animation
+	 *
+	 * @param  {object}         options              - The options for the animation
+	 * @param  {object}         options.element      - Element/s we are animating (DOM nodes)
+	 * @param  {string}         options.property     - The CSS property to animate [optional] [default: 'height']
+	 * @param  {integer|string} options.closeSize    - The size the element should close to. Can be 'auto' or pixel value [optional] [default: 0]
+	 * @param  {integer|string} options.openSize     - The size the element should open to. Can be 'auto' or pixel value [optional] [default: 'auto']
+	 * @param  {integer}        options.speed        - The speed of the animation in milliseconds [optional] [default: 250]
+	 * @param  {function}       options.prefunction  - A function to be executed before each animation starts, passes {object} element, {string} state [optional]
+	 * @param  {function}       options.postfunction - A function to be executed after each animation ends, passes {object} element, {string} state [optional]
+	 * @param  {function}       options.callback     - A function to be executed after the animation ends, passes {object} element, {string} state [optional]
+	 *
+	 * @return {unknown}                             - The return value passed on from our options.callback function [optional]
+	 */
+	animate.Toggle = function( options ) {
+
+		var elements = options.element;
+		var property = options.property || 'height';
+		var speed = options.speed || 250;
+		var closeSize = options.closeSize === undefined ? 0 : options.closeSize;
+		var openSize = options.openSize === undefined ? 'auto' : options.openSize;
+
+		// making a single DOM element iteratable
+		if( elements.length === undefined ) {
+			elements = [ elements ];
+		}
+
+		// making a prefunction if none was provided
+		if( typeof options.prefunction !== 'function' ) {
+			options.prefunction = function() {};
+		}
+
+		// making a postfunction if none was provided
+		if( typeof options.postfunction !== 'function' ) {
+			options.postfunction = function() {};
+		}
+
+		// making a callback if none was provided
+		if( typeof options.callback !== 'function' ) {
+			options.callback = function() {};
+		}
+
+		// adding iteration counts
+		elements[ 0 ].AUtoggleInteration = 0;
+		elements[ 0 ].AUtoggleInterations = elements.length;
+
+		// iterate over all DOM nodes
+		for( var i = 0; i < elements.length; i++ ) {
+			var element = elements[ i ];
+
+			AU.animate.Stop( element );
+
+			var targetSize;     // the size the element should open/close to after toggle is clicked
+			var preState = '';  // the state we animate to for the prefunction and callback functions
+			var postState = ''; // the state we animate to for the prefunction and callback functions
+			var currentSize = parseInt( AU.animate.GetCSSPropertyBecauseIE( element, options.property ) ); // the current size of the element
+
+			if( currentSize === closeSize || element.AUtoggleState === 'closing' ) {
+				targetSize = openSize;
+				preState = 'opening';
+				postState = 'open';
+			}
+			else if( currentSize !== closeSize || element.AUtoggleState === 'opening' ) {
+				targetSize = closeSize;
+				preState = 'closing';
+				postState = 'closed';
+			}
+			else {
+				throw new Error('AU.animate.Toggle cannot determine state of element');
+			}
+
+			// run prefunction once per element
+			options.prefunction( element, preState );
+
+			// shoot off animation
+			AU.animate.Run({
+				element: element,
+				endSize: targetSize,
+				property: property,
+				speed: speed,
+				callback: function() { // making sure we fire the callback only once
+					elements[ 0 ].AUtoggleInteration ++;
+
+					if( elements[ 0 ].AUtoggleInteration === elements[ 0 ].AUinterations ) {
+						var returnParam = options.callback( element, postState );
+
+						// run postfunction once per element
+						options.postfunction( element, postState );
+
+						return returnParam;
+					}
+
+					// run postfunction once per element
+					options.postfunction( element, postState );
+				},
+			});
+
+		}
+	};
+
+
+	AU.animate = animate;
+
+}( AU ));
+
+
+if( typeof module !== 'undefined' ) {
+	module.exports = AU;
+}
+
+
+if( typeof exports !== 'undefined' ) {
+	Object.defineProperty( exports, "__esModule", { value: true } );
+
+	exports.default = AU;
+}

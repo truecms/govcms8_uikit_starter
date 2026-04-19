@@ -1,5 +1,8 @@
 .tabs-primary {
   .au-btn.is-active {
-    @extend .au-btn:hover;
+    background-color: $AU-color-foreground-text;
+    border-color: $AU-color-foreground-text;
+    color: $AU-color-background;
+    text-decoration: underline;
   }
 }

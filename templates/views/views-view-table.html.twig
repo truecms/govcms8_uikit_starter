@@ -30,8 +30,7 @@
  * @see template_preprocess_views_view_table()
  */
 #}
-{%
-  set classes = [
+{% set classes = [
     'views-table',
     'views-view-table',
     'cols-' ~ header|length,
@@ -39,8 +38,7 @@
     sticky ? 'sticky-enabled',
     'au-table',
     'au-table--striped',
-  ]
-%}
+  ] %}
 
 <table{{ attributes.addClass(classes) }}>
   {% if caption_needed %}
@@ -67,13 +65,11 @@
       <tr class="au-table__row">
         {% for key, column in header %}
           {% if column.default_classes %}
-            {%
-              set column_classes = [
+            {% set column_classes = [
                 'views-field',
                 'views-field-' ~ fields[key],
                 'au-table__header',
-              ]
-            %}
+              ] %}
           {% endif %}
           <th{{ column.attributes.addClass(column_classes).setAttribute('scope', 'col') }}>
             {%- if column.wrapper_element -%}
@@ -98,20 +94,16 @@
   {% endif %}
   <tbody class="au-table__body">
     {% for row in rows %}
-      {%
-        set row_classes = [
+      {% set row_classes = [
         'au-table__row',
-      ]
-      %}
+      ] %}
       <tr{{ row.attributes.addClass(row_classes) }}>
-        {% for key, column in row.columns %}
+        {% for column in row.columns %}
           {% if column.default_classes %}
-            {%
-              set column_classes = [
+            {% set column_classes = [
                 'views-field',
                 'au-table__cell',
-              ]
-            %}
+              ] %}
             {% for field in column.fields %}
               {% set column_classes = column_classes|merge(['views-field-' ~ field]) %}
             {% endfor %}

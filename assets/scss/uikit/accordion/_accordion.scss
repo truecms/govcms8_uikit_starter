@@ -10,7 +10,8 @@
 .au-body--dark .au-accordion,
 .color--dark .au-accordion,
 .color--dark-alt .au-accordion {
-  @extend .au-accordion.au-accordion--dark !optional;
+  @extend .au-accordion !optional;
+  @extend .au-accordion--dark !optional;
 }
 
 // Accordion item title on dark background cannot be extended, so direct style copy follows.
