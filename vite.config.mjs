@@ -24,6 +24,11 @@ export default defineConfig({
       fileName: () => 'govcms8_uikit_starter.js',
       cssFileName: 'style',
     },
+    rollupOptions: {
+      output: {
+        intro: '"use strict";',
+      },
+    },
     outDir: 'build',
     emptyOutDir: true,
     sourcemap: false,

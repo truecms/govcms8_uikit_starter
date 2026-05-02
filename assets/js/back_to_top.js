@@ -3,24 +3,29 @@
  * JS for Back To Top link.
  */
 
-(function ($) {
+(function ($, Drupal, once) {
+
+  'use strict';
+
+  var scrollListenerAttached = false;
+
+  function toggleBackToTop() {
+    $('.back-to-top__link').toggleClass('is-visible', $(window).scrollTop() > 250);
+  }
 
   Drupal.behaviors.govcms8_uikit_starter_BackToTop = {
     attach: function (context, settings) {
       var $body = $('body, html');
-      var backToTop = $('.back-to-top__link', context);
+      var backToTop = $(once('govcms8-uikit-starter-back-to-top', '.back-to-top__link', context));
 
-      // Toggle class on backToTop.
-      $(window).scroll(function () {
-        if ($(this).scrollTop() > 250) {
-          backToTop.addClass('is-visible');
-        } else {
-          backToTop.removeClass('is-visible');
-        }
-      });
+      if (!scrollListenerAttached) {
+        $(window).on('scroll.govcms8UIKitBackToTop', toggleBackToTop);
+        scrollListenerAttached = true;
+        toggleBackToTop();
+      }
 
       // Scroll smoothly to top on click.
-      backToTop.click(function (event) {
+      backToTop.on('click', function (event) {
         $body.animate({
           scrollTop: 0
         }, 800, function () {
@@ -32,4 +37,4 @@
     }
   };
 
-})(jQuery);
+})(jQuery, Drupal, once);
